@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "efix": "eslint . --fix"
+  },
+  "dependencies": {
+    "eslint": "^9.29.0"
+  }
+}
