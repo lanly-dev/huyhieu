@@ -13,6 +13,7 @@ export default defineConfig([
       }
     },
     rules: {
+      'comma-dangle': ['error'],
       'eol-last': ['error', 'always'],
       'no-trailing-spaces': 'error',
       'no-unused-vars': 'warn',

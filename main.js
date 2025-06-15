@@ -2,7 +2,58 @@
 import { Hono } from 'https://deno.land/x/hono@v3.12.7/mod.ts'
 
 const app = new Hono()
-app.get('/', (c) => c.text('Hello from Hono!'))
+app.get('/', (c) =>
+  c.html(`
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>HuyHieu Badge Service</title>
+      <style>
+        body { font-family: system-ui, sans-serif; background: #f9f9f9; color: #222; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px #0001; padding: 2rem; }
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .badge-demo { margin: 1.5rem 0; }
+        code, pre { background: #f4f4f4; border-radius: 4px; padding: 2px 6px; }
+        a { color: #0077cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>HuyHieu Badge Service</h1>
+        <p>Create flat, minimalistic SVG badges with website favicons and custom text.</p>
+        <div class="badge-demo">
+          <img src="/huyhieu?url=https://github.com&label=GitHub&value=Online&color=%2300bfff" alt="Badge demo" height="28" />
+        </div>
+        <h2>Usage</h2>
+        <pre><code>/huyhieu?url=&lt;website&gt;&label=&lt;label&gt;&value=&lt;value&gt;&color=&lt;color&gt;&text=&lt;textColor&gt;&size=&lt;size&gt;</code></pre>
+        <ul>
+          <li><b>url</b> (optional): Website to fetch favicon from</li>
+          <li><b>label</b> (optional): Left text (default: 'huy' if both label and value are missing)</li>
+          <li><b>value</b> (optional): Right text (default: 'hieu' if both label and value are missing)</li>
+          <li><b>color</b> (optional): Right bg color (default: green, supports hex codes like %2300bfff)</li>
+          <li><b>text</b> (optional): Right text color (default: white, supports hex codes)</li>
+          <li><b>size</b> (optional): Badge size (<code>small</code>, <code>medium</code>, <code>large</code>, default: <code>small</code>)</li>
+        </ul>
+        <h2>Examples</h2>
+        <ul>
+          <li>Only favicon: <code>/huyhieu?url=https://github.com</code></li>
+          <li>Favicon + label: <code>/huyhieu?url=https://github.com&label=GitHub</code></li>
+          <li>Favicon + value: <code>/huyhieu?url=https://github.com&value=Online</code></li>
+          <li>Favicon + both: <code>/huyhieu?url=https://github.com&label=GitHub&value=Online</code></li>
+          <li>Custom color: <code>/huyhieu?url=https://github.com&label=GitHub&value=Online&color=%2300bfff</code></li>
+          <li>Small: <code>/huyhieu?url=https://github.com&label=GitHub&value=Online&size=small</code></li>
+          <li>Large: <code>/huyhieu?url=https://github.com&label=GitHub&value=Online&size=large</code></li>
+          <li>Default: <code>/huyhieu</code> → shows 'huy hieu'</li>
+        </ul>
+        <p style="margin-top:2rem;font-size:0.95em;color:#888;">Open source. Powered by <a href="https://deno.com/" target="_blank">Deno</a> &amp; <a href="https://hono.dev/" target="_blank">Hono</a>.</p>
+      </div>
+    </body>
+    </html>
+  `)
+)
 app.get('/yeah', (c) => c.text('Routing!'))
 
 // Badge service route
@@ -13,6 +64,7 @@ app.get('/huyhieu', async (c) => {
   const label = c.req.query('label') ?? ''
   const value = c.req.query('value') ?? ''
   const size = c.req.query('size') ?? 'small'
+  const radiusParam = c.req.query('radius')
   let faviconDataUrl = null
 
   const sizeMap = {
@@ -21,6 +73,7 @@ app.get('/huyhieu', async (c) => {
     large: { fontSize: 15, height: 28, icon: 22, y: 20 }
   }
   const s = sizeMap[size] ?? sizeMap.small
+  const borderRadius = radiusParam !== undefined ? Number(radiusParam) : 0
 
   if (siteUrl) {
     try {
@@ -51,16 +104,16 @@ app.get('/huyhieu', async (c) => {
   return new Response(
     `
     <svg xmlns='http://www.w3.org/2000/svg' width='${totalWidth}' height='${s.height}' style='font-family:Verdana,sans-serif;font-size:${s.fontSize}px;'>
-      <rect width='${totalWidth}' height='${s.height}' rx='${Math.round(s.height / 5)}' fill='#eee' />
-      ${valueText ? `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='0 ${Math.round(s.height / 5)} ${Math.round(s.height / 5)} 0' fill='${color}'/>` : ''}
+      <rect width='${totalWidth}' height='${s.height}' rx='${borderRadius}' fill='#eee' />
+      ${valueText ? `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='0 ${borderRadius} ${borderRadius} 0' fill='${color}'/>` : ''}
       ${faviconDataUrl ? `<image x='4' y='${Math.round((s.height - s.icon) / 2)}' width='${s.icon}' height='${s.icon}' href='${faviconDataUrl}'/>` : ''}
       ${labelText ? `<text x='${faviconDataUrl ? s.icon + 10 : labelWidth / 2}' y='${s.y}' fill='#333' text-anchor='${faviconDataUrl ? 'start' : 'middle'}'>${labelText}</text>` : ''}
       ${valueText ? `<text x='${labelWidth + iconWidth + valueWidth / 2}' y='${s.y}' fill='${textColor}' text-anchor='middle'>${valueText}</text>` : ''}
     </svg>
     `,
     {
-      headers: { 'Content-Type': 'image/svg+xml' },
-    },
+      headers: { 'Content-Type': 'image/svg+xml' }
+    }
   )
 })
 
