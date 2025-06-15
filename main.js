@@ -66,6 +66,7 @@ app.get('/huyhieu', async (c) => {
   const value = c.req.query('value') ?? ''
   const size = c.req.query('size') ?? 'small'
   const radiusParam = c.req.query('radius')
+  const shape = c.req.query('shape') ?? 'rect' // rect, trapezoid, right-trapezoid, middle-trapezoid, parallelogram
   let faviconDataUrl = null
 
   const sizeMap = {
@@ -102,13 +103,33 @@ app.get('/huyhieu', async (c) => {
   const iconWidth = faviconDataUrl ? s.icon + 6 : 0
   const totalWidth = labelWidth + valueWidth + iconWidth || s.height * 2
 
+  // Calculate parallelogram points
+  const slant = Math.round(s.height * 0.5)
+  let badgeBg = ''
+  let valueBg = ''
+  let iconX = 4
+  let labelTextX = faviconDataUrl ? s.icon + 10 : labelWidth / 2
+  if (shape === 'parallelogram') {
+    badgeBg = `<polygon points='${slant},0 ${totalWidth},0 ${totalWidth-slant},${s.height} 0,${s.height}' fill="#eee"/>`
+    if (valueText) {
+      valueBg = `<polygon points='${labelWidth+iconWidth+slant},0 ${totalWidth},0 ${totalWidth-slant},${s.height} ${labelWidth+iconWidth},${s.height}' fill='${color}'/>`
+    }
+    iconX = slant + 4
+    labelTextX = faviconDataUrl ? slant + s.icon + 10 : slant + labelWidth / 2
+  } else {
+    badgeBg = `<rect width='${totalWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='#eee' />`
+    if (valueText) {
+      valueBg = `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='${color}'/>`
+    }
+  }
+
   return new Response(
     `
     <svg xmlns='http://www.w3.org/2000/svg' width='${totalWidth}' height='${s.height}' style='font-family:Verdana,sans-serif;font-size:${s.fontSize}px;'>
-      <rect width='${totalWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='#eee' />
-      ${valueText ? `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='${color}'/>` : ''}
-      ${faviconDataUrl ? `<image x='4' y='${Math.round((s.height - s.icon) / 2)}' width='${s.icon}' height='${s.icon}' href='${faviconDataUrl}'/>` : ''}
-      ${labelText ? `<text x='${faviconDataUrl ? s.icon + 10 : labelWidth / 2}' y='${s.y}' fill='#333' text-anchor='${faviconDataUrl ? 'start' : 'middle'}'>${labelText}</text>` : ''}
+      ${badgeBg}
+      ${valueBg}
+      ${faviconDataUrl ? `<image x='${iconX}' y='${Math.round((s.height - s.icon) / 2)}' width='${s.icon}' height='${s.icon}' href='${faviconDataUrl}'/>` : ''}
+      ${labelText ? `<text x='${labelTextX}' y='${s.y}' fill='#333' text-anchor='${faviconDataUrl ? 'start' : 'middle'}'>${labelText}</text>` : ''}
       ${valueText ? `<text x='${labelWidth + iconWidth + valueWidth / 2}' y='${s.y}' fill='${textColor}' text-anchor='middle'>${valueText}</text>` : ''}
     </svg>
     `,
