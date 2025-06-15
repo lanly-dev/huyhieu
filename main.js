@@ -7,12 +7,20 @@ app.get('/yeah', (c) => c.text('Routing!'))
 
 // Badge service route
 app.get('/huyhieu', async (c) => {
-  const color = c.req.query('color') || '#4c1'
-  const textColor = c.req.query('text') || '#fff'
+  const color = c.req.query('color') ?? 'green'
+  const textColor = c.req.query('text') ?? 'white'
   const siteUrl = c.req.query('url')
-  const label = c.req.query('label') || ''
-  const value = c.req.query('value') || ''
+  const label = c.req.query('label') ?? ''
+  const value = c.req.query('value') ?? ''
+  const size = c.req.query('size') ?? 'small'
   let faviconDataUrl = null
+
+  const sizeMap = {
+    small: { fontSize: 9, height: 16, icon: 12, y: 11 },
+    medium: { fontSize: 11, height: 20, icon: 16, y: 14 },
+    large: { fontSize: 15, height: 28, icon: 22, y: 20 }
+  }
+  const s = sizeMap[size] ?? sizeMap.small
 
   if (siteUrl) {
     try {
@@ -25,7 +33,7 @@ app.get('/huyhieu', async (c) => {
         faviconDataUrl = `data:image/x-icon;base64,${base64}`
       }
     } catch {
-      // Ignore favicon errors
+      console.error('HuyHieu: Failed to fetch favicon:', siteUrl)
     }
   }
 
@@ -35,19 +43,19 @@ app.get('/huyhieu', async (c) => {
     labelText = 'huy'
     valueText = 'hieu'
   }
-  const labelWidth = labelText ? 10 + labelText.length * 7 : 0
-  const valueWidth = valueText ? 10 + valueText.length * 7 : 0
-  const iconWidth = faviconDataUrl ? 22 : 0
-  const totalWidth = labelWidth + valueWidth + iconWidth || 32
+  const labelWidth = labelText ? 10 + labelText.length * s.fontSize : 0
+  const valueWidth = valueText ? 10 + valueText.length * s.fontSize : 0
+  const iconWidth = faviconDataUrl ? s.icon + 6 : 0
+  const totalWidth = labelWidth + valueWidth + iconWidth || s.height * 2
 
   return new Response(
     `
-    <svg xmlns='http://www.w3.org/2000/svg' width='${totalWidth}' height='20' style='font-family:Verdana,sans-serif;font-size:11px;'>
-      <rect width='${totalWidth}' height='20' rx='4' fill='#eee'/>
-      ${valueText ? `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='20' rx='0 4 4 0' fill='${color}'/>` : ''}
-      ${faviconDataUrl ? `<image x='4' y='2' width='16' height='16' href='${faviconDataUrl}'/>` : ''}
-      ${labelText ? `<text x='${faviconDataUrl ? 24 : labelWidth / 2}' y='14' fill='#333' text-anchor='${faviconDataUrl ? 'start' : 'middle'}'>${labelText}</text>` : ''}
-      ${valueText ? `<text x='${labelWidth + iconWidth + valueWidth / 2}' y='14' fill='${textColor}' text-anchor='middle'>${valueText}</text>` : ''}
+    <svg xmlns='http://www.w3.org/2000/svg' width='${totalWidth}' height='${s.height}' style='font-family:Verdana,sans-serif;font-size:${s.fontSize}px;'>
+      <rect width='${totalWidth}' height='${s.height}' rx='${Math.round(s.height / 5)}' fill='#eee' />
+      ${valueText ? `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='0 ${Math.round(s.height / 5)} ${Math.round(s.height / 5)} 0' fill='${color}'/>` : ''}
+      ${faviconDataUrl ? `<image x='4' y='${Math.round((s.height - s.icon) / 2)}' width='${s.icon}' height='${s.icon}' href='${faviconDataUrl}'/>` : ''}
+      ${labelText ? `<text x='${faviconDataUrl ? s.icon + 10 : labelWidth / 2}' y='${s.y}' fill='#333' text-anchor='${faviconDataUrl ? 'start' : 'middle'}'>${labelText}</text>` : ''}
+      ${valueText ? `<text x='${labelWidth + iconWidth + valueWidth / 2}' y='${s.y}' fill='${textColor}' text-anchor='middle'>${valueText}</text>` : ''}
     </svg>
     `,
     {

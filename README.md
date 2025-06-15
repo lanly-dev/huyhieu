@@ -1,11 +1,12 @@
-# huyhieu - Minimalistic Badge Service
+# HuyHieu - Minimalistic Badge Service
 
-A simple, flat, and minimalistic badge generator that can embed a website's favicon and custom text. Built with [Hono](https://hono.dev/), Deno, and served by ValTown
+A simple, flat, and minimalistic badge generator that can embed a website's favicon and custom text. Built with [Hono](https://hono.dev/) and Deno.
 
 ## Features
 - Flat, modern SVG badges
 - Embeds a website's favicon (ICO)
 - Customizable label and value text (optional)
+- Three badge sizes: small, medium, large
 - Sensible defaults (shows 'huy hieu' if no text provided)
 - Fast and lightweight
 
@@ -15,24 +16,26 @@ Start the server:
 deno run --allow-net main.js
 ```
 
-### huyhieu API
+### HuyHieu API
 ```
-/huyhieu?url=<website>&label=<label>&value=<value>&color=<color>&text=<textColor>
+/huyhieu?url=<website>&label=<label>&value=<value>&color=<color>&text=<textColor>&size=<size>
 ```
 - `url` (optional): Website to fetch favicon from
 - `label` (optional): Left text (default: 'huy' if both label and value are missing)
 - `value` (optional): Right text (default: 'hieu' if both label and value are missing)
-- `color` (optional): Badge color (default: #4c1)
-- `text` (optional): Value text color (default: #fff)
+- `color` (optional): Right bg color (default: green, supports hex codes like %2300bfff)
+- `text` (optional): Right text color (default: white, supports hex codes)
+- `size` (optional): Badge size (`small`, `medium`, `large`, default: `medium`)
 
 ### Examples
-- Only favicon: `/huyhieu?url=https://github.com`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com)
-- Favicon + label: `/huyhieu?url=https://github.com&label=GitHub`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub)
-- Favicon + value: `/huyhieu?url=https://github.com&value=Online`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&value=Online)
-- Favicon + both: `/huyhieu?url=https://github.com&label=GitHub&value=Online`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online)
-- Custom color: `/huyhieu?url=https://github.com&label=GitHub&value=Online&color=blue`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&color=blue)
-
-- Default (no params): `/huyhieu → shows 'huy hieu' ![Example badge](https://huyhieu.val.run/huyhieu)
+- Only favicon: `/huyhieu?url=https://github.com` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com)
+- Favicon + label: `/huyhieu?url=https://github.com&label=GitHub` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub)
+- Favicon + value: `/huyhieu?url=https://github.com&value=Online` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&value=Online)
+- Favicon + both: `/huyhieu?url=https://github.com&label=GitHub&value=Online` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online)
+- Custom color: `/huyhieu?url=https://github.com&label=GitHub&value=Online&color=%2300bfff` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&color=%2300bfff)
+- Small size: `/huyhieu?url=https://github.com&label=GitHub&value=Online&size=small` ![Small badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&size=small)
+- Large size: `/huyhieu?url=https://github.com&label=GitHub&value=Online&size=large` ![Large badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&size=large)
+- Default (no params): `/huyhieu` → shows 'huy hieu' ![Example badge](https://huyhieu.val.run/huyhieu)
 
 ## Development
 - Requires [Deno](https://deno.com/)
