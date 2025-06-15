@@ -22,8 +22,8 @@ app.get('/', (c) =>
     </head>
     <body>
       <div class="container">
-        <h1>HuyHieu Badge Service</h1>
-        <p>Create flat, minimalistic SVG badges with website favicons and custom text.</p>
+        <h1>HuyHieu - Minimalistic Badge Service</h1>
+        <p>Create flat, minimalistic SVG badges with website favicon and custom text.</p>
         <div class="badge-demo">
           <img src="/huyhieu?url=https://github.com&label=GitHub&value=Online&color=%2300bfff" alt="Badge demo" height="28" />
         </div>
@@ -48,7 +48,8 @@ app.get('/', (c) =>
           <li>Large: <code>/huyhieu?url=https://github.com&label=GitHub&value=Online&size=large</code></li>
           <li>Default: <code>/huyhieu</code> → shows 'huy hieu'</li>
         </ul>
-        <p style="margin-top:2rem;font-size:0.95em;color:#888;">Open source. Powered by <a href="https://deno.com/" target="_blank">Deno</a> &amp; <a href="https://hono.dev/" target="_blank">Hono</a>.</p>
+        <p style="margin-top:2rem;font-size:0.95em;color:#888;">Open source. Powered by <a href="https://deno.com/" target="_blank">Deno</a> &amp; <a href="https://hono.dev/" target="_blank">Hono</a>.<br>
+        <b>This service is hosted on <a href='https://val.town/' target='_blank'>ValTown</a>.</b></p>
       </div>
     </body>
     </html>
@@ -104,8 +105,8 @@ app.get('/huyhieu', async (c) => {
   return new Response(
     `
     <svg xmlns='http://www.w3.org/2000/svg' width='${totalWidth}' height='${s.height}' style='font-family:Verdana,sans-serif;font-size:${s.fontSize}px;'>
-      <rect width='${totalWidth}' height='${s.height}' rx='${borderRadius}' fill='#eee' />
-      ${valueText ? `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='0 ${borderRadius} ${borderRadius} 0' fill='${color}'/>` : ''}
+      <rect width='${totalWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='#eee' />
+      ${valueText ? `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='${color}'/>` : ''}
       ${faviconDataUrl ? `<image x='4' y='${Math.round((s.height - s.icon) / 2)}' width='${s.icon}' height='${s.icon}' href='${faviconDataUrl}'/>` : ''}
       ${labelText ? `<text x='${faviconDataUrl ? s.icon + 10 : labelWidth / 2}' y='${s.y}' fill='#333' text-anchor='${faviconDataUrl ? 'start' : 'middle'}'>${labelText}</text>` : ''}
       ${valueText ? `<text x='${labelWidth + iconWidth + valueWidth / 2}' y='${s.y}' fill='${textColor}' text-anchor='middle'>${valueText}</text>` : ''}

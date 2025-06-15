@@ -2,6 +2,8 @@
 
 A simple, flat, and minimalistic badge generator that can embed a website's favicon and custom text. Built with [Hono](https://hono.dev/) and Deno.
 
+> This service is hosted on [ValTown](https://val.town/) for instant, serverless deployment and sharing.
+
 ## Features
 - Flat, modern SVG badges
 - Embeds a website's favicon (ICO)
