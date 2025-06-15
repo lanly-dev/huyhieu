@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "efix": "eslint . --fix"
+    "efix": "eslint . --fix",
+    "dev": "nodemon --exec \"deno run --allow-net main.js\" --ext js,json --watch main.js"
   },
-  "dependencies": {
-    "eslint": "^9.29.0"
+  "devDependencies": {
+    "eslint": "^9.29.0",
+    "nodemon": "^3.1.10"
   }
 }

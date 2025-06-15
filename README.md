@@ -10,18 +10,13 @@ A simple, flat, and minimalistic badge generator that can embed a website's favi
 - Customizable label and value text
 - Three badge sizes: small, medium, large
 - Customizable border radius (default: 0)
+- Parallelogram shape
 - Sensible defaults (shows 'huy hieu' if no text provided)
 - Fast and lightweight
 
-## Usage
-Start the server:
-```sh
-deno run --allow-net main.js
-```
-
 ### HuyHieu API
 ```
-/huyhieu?url=<website>&label=<label>&value=<value>&color=<color>&text=<textColor>&size=<size>&radius=<radius>
+/huyhieu?url=<website>&label=<label>&value=<value>&color=<color>&text=<textColor>&size=<size>&radius=<radius>&shape=<shape>
 ```
 - `url` (optional): Website to fetch favicon from
 - `label` (optional): Left text (default: 'huy' if both label and value are missing)
@@ -30,6 +25,7 @@ deno run --allow-net main.js
 - `text` (optional): Right text color (default: white, supports hex codes)
 - `size` (optional): Badge size (`small`, `medium`, `large`, default: `small`)
 - `radius` (optional): Border radius in px (default: 0, for square corners)
+- `shape` (optional): Badge shape (`rect`, `parallelogram`, etc.; default: `rect`)
 
 ### Examples
 - Only favicon: `/huyhieu?url=https://github.com` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com)
@@ -40,6 +36,7 @@ deno run --allow-net main.js
 - Small size: `/huyhieu?url=https://github.com&label=GitHub&value=Online&size=small` ![Small badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&size=small)
 - Large size: `/huyhieu?url=https://github.com&label=GitHub&value=Online&size=large` ![Large badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&size=large)
 - Custom border radius: `/huyhieu?url=https://github.com&label=GitHub&value=Online&radius=10` ![Radius badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&radius=10)
+- **Parallelogram shape:** `/huyhieu?url=https://github.com&label=GitHub&value=Online&shape=parallelogram` ![Parallelogram badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&shape=parallelogram)
 - Default (no params): `/huyhieu` → shows 'huy hieu' ![Example badge](https://huyhieu.val.run/huyhieu)
 
 ## Development

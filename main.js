@@ -98,29 +98,34 @@ app.get('/huyhieu', async (c) => {
     labelText = 'huy'
     valueText = 'hieu'
   }
-  const labelWidth = labelText ? 10 + labelText.length * s.fontSize : 0
-  const valueWidth = valueText ? 10 + valueText.length * s.fontSize : 0
-  const iconWidth = faviconDataUrl ? s.icon + 6 : 0
+  const labelWidth = labelText ? labelText.length * s.fontSize : 0
+  const valueWidth = valueText ? valueText.length * s.fontSize : 0
+  const iconPadL = labelText ? 4 : 0 // Left padding if label present
+  const iconPadR = (!labelText && shape === 'parallelogram') ? 4 : 0 // Right padding if no label and parallelogram
+  const iconLabelPad = 4 // Padding between icon and label
+  const iconWidth = faviconDataUrl ? s.icon + iconPadL + iconPadR : 0
   const totalWidth = labelWidth + valueWidth + iconWidth || s.height * 2
 
   // Calculate parallelogram points
   const slant = Math.round(s.height * 0.5)
   let badgeBg = ''
   let valueBg = ''
-  let iconX = 4
-  let labelTextX = faviconDataUrl ? s.icon + 10 : labelWidth / 2
+  let iconX = 10
+  let labelTextX = faviconDataUrl ? s.icon + iconLabelPad : labelWidth / 2
   if (shape === 'parallelogram') {
     badgeBg = `<polygon points='${slant},0 ${totalWidth},0 ${totalWidth-slant},${s.height} 0,${s.height}' fill="#eee"/>`
     if (valueText) {
       valueBg = `<polygon points='${labelWidth+iconWidth+slant},0 ${totalWidth},0 ${totalWidth-slant},${s.height} ${labelWidth+iconWidth},${s.height}' fill='${color}'/>`
     }
-    iconX = slant + 4
-    labelTextX = faviconDataUrl ? slant + s.icon + 10 : slant + labelWidth / 2
+    iconX = slant + iconPadL
+    labelTextX = faviconDataUrl ? slant + s.icon + iconPadL + iconLabelPad : slant + labelWidth / 2
   } else {
     badgeBg = `<rect width='${totalWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='#eee' />`
     if (valueText) {
       valueBg = `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='${color}'/>`
     }
+    iconX = iconPadL
+    labelTextX = faviconDataUrl ? s.icon + iconPadL + iconLabelPad : labelWidth / 2
   }
 
   return new Response(
