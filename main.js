@@ -6,7 +6,7 @@ app.get('/', (c) => c.text('Hello from Hono!'))
 app.get('/yeah', (c) => c.text('Routing!'))
 
 // Badge service route
-app.get('/badge', async (c) => {
+app.get('/huyhieu', async (c) => {
   const color = c.req.query('color') || '#4c1'
   const textColor = c.req.query('text') || '#fff'
   const siteUrl = c.req.query('url')
@@ -57,4 +57,5 @@ app.get('/badge', async (c) => {
 })
 
 export default app.fetch
+// Serve the app in local to test
 Deno.serve(app.fetch)

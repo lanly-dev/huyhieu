@@ -1,6 +1,6 @@
-# huyhieu - Minimalistic Favicon Badge Service
+# huyhieu - Minimalistic Badge Service
 
-A simple, flat, and minimalistic badge generator that can embed a website's favicon and custom text. Built with [Hono](https://hono.dev/) and Deno.
+A simple, flat, and minimalistic badge generator that can embed a website's favicon and custom text. Built with [Hono](https://hono.dev/), Deno, and served by ValTown
 
 ## Features
 - Flat, modern SVG badges
@@ -15,9 +15,9 @@ Start the server:
 deno run --allow-net main.js
 ```
 
-### Badge API
+### huyhieu API
 ```
-/badge?url=<website>&label=<label>&value=<value>&color=<color>&text=<textColor>
+/huyhieu?url=<website>&label=<label>&value=<value>&color=<color>&text=<textColor>
 ```
 - `url` (optional): Website to fetch favicon from
 - `label` (optional): Left text (default: 'huy' if both label and value are missing)
@@ -26,16 +26,13 @@ deno run --allow-net main.js
 - `text` (optional): Value text color (default: #fff)
 
 ### Examples
-- Only favicon: `/badge?url=https://github.com`![Example badge](https://huyhieu.val.run/badge?url=https://github.com)
-- Favicon + label: `/badge?url=https://github.com&label=GitHub`![Example badge](https://huyhieu.val.run/badge?url=https://github.com&label=GitHub)
-- Favicon + value: `/badge?url=https://github.com&value=Online`![Example badge](https://huyhieu.val.run/badge?url=https://github.com&value=Online)
-- Favicon + both: `/badge?url=https://github.com&label=GitHub&value=Online`![Example badge](https://huyhieu.val.run/badge?url=https://github.com&label=GitHub&value=Online)
-- Custom color: `/badge?url=https://github.com&label=GitHub&value=Online&color=blue`![Example badge](https://huyhieu.val.run/badge?url=https://github.com&label=GitHub&value=Online&color=blue)
+- Only favicon: `/huyhieu?url=https://github.com`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com)
+- Favicon + label: `/huyhieu?url=https://github.com&label=GitHub`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub)
+- Favicon + value: `/huyhieu?url=https://github.com&value=Online`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&value=Online)
+- Favicon + both: `/huyhieu?url=https://github.com&label=GitHub&value=Online`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online)
+- Custom color: `/huyhieu?url=https://github.com&label=GitHub&value=Online&color=blue`![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&color=blue)
 
-- Default (no params): `/badge` → shows 'huy hieu' ![Example badge](https://huyhieu.val.run/badge)
-
-## Example Output
-![Example badge](https://huyhieu.val.run/badge?url=https://github.com&label=GitHub&value=Online&color=%234c1)
+- Default (no params): `/huyhieu → shows 'huy hieu' ![Example badge](https://huyhieu.val.run/huyhieu)
 
 ## Development
 - Requires [Deno](https://deno.com/)
@@ -44,10 +41,10 @@ deno run --allow-net main.js
 ## Notes
 If you use Deno and ValTown for the first time, you may need to add it to your PATH:
 ```sh
+# Set deno to path
 set PATH=%PATH%;%USERPROFILE%\.deno\bin
+# Install vt
 deno install -grAf jsr:@valtown/vt
+# Run in local
 deno run --allow-net main.js
 ```
-
----
-MIT License
