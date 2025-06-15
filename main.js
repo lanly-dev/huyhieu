@@ -105,8 +105,9 @@ app.get('/huyhieu', async (c) => {
       if (size === 'large') labelWidth -= 30
       else labelWidth -= 15
     } else if (shape === 'parallelogram') {
-      if (size === 'large') labelWidth -= 25
-      else labelWidth -= 10
+      if (size === 'small') labelWidth -= 15
+      else if (size === 'medium') labelWidth -= 20
+      else labelWidth -= 25
     }
   }
 

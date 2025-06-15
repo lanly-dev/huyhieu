@@ -1,32 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>HuyHieu Badge Visual Test</title>
   <style>
-    body { font-family: system-ui, sans-serif; background: #f9f9f9; color: #222; margin: 0; padding: 2rem; transition: background 0.2s, color 0.2s; }
-    body.dark { background: #181818; color: #eee; }
-    h1 { font-size: 2rem; }
-    .demo-row { margin-bottom: 1.5rem; }
-    .demo-label { display: inline-block; width: 220px; vertical-align: top; }
-    .badge-img { background: #fff; box-shadow: 0 1px 4px #0001; margin-left: 10px; vertical-align: middle; }
-    .toggle-btn { margin-bottom: 2rem; padding: 0.5em 1.2em; font-size: 1em; border-radius: 6px; border: 1px solid #ccc; background: #fff; color: #222; cursor: pointer; }
-    body.dark .toggle-btn { background: #222; color: #fff; border-color: #444; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f9f9f9;
+      color: #222;
+      margin: 0;
+      padding: 2rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    body.dark {
+      background: #181818;
+      color: #eee;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .demo-row {
+      margin-bottom: 1.5rem;
+    }
+
+    .demo-label {
+      display: inline-block;
+      width: 220px;
+      vertical-align: top;
+    }
+
+    .badge-img {
+      background: #fff;
+      box-shadow: 0 1px 4px #0001;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .toggle-btn {
+      margin-bottom: 2rem;
+      padding: 0.5em 1.2em;
+      font-size: 1em;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fff;
+      color: #222;
+      cursor: pointer;
+    }
+
+    body.dark .toggle-btn {
+      background: #222;
+      color: #fff;
+      border-color: #444;
+    }
   </style>
 </head>
+
 <body>
   <button class="toggle-btn" onclick="toggleBg()">Switch to Dark</button>
   <h1>HuyHieu Badge Visual Test (<span id="host-label"></span>)</h1>
+  <div style="margin-bottom:1.5rem">
+    <label>Label: <input id="input-label" type="text" style="width:120px" value="GitHub"></label>
+    <label style="margin-left:1em">Value: <input id="input-value" type="text" style="width:120px" value="Text"></label>
+    <button id="update-btn" style="margin-left:1em">Update All</button>
+    <button id="reset-btn" style="margin-left:0.5em">Reset</button>
+    <button id="clear-btn" style="margin-left:0.5em">Clear</button>
+  </div>
   <div id="demo-badges"></div>
   <script>
     function toggleBg() {
       document.body.classList.toggle('dark')
       const btn = document.querySelector('.toggle-btn');
-      if(document.body.classList.contains('dark')) btn.textContent = 'Switch to Light'
+      if (document.body.classList.contains('dark')) btn.textContent = 'Switch to Light'
       else btn.textContent = 'Switch to Dark'
     }
     const host = 'http://localhost:8000'
-    document.getElementById('host-label').textContent = host;
+    document.getElementById('host-label').textContent = host
     const demos = [
       { label: 'Default', q: '' },
       { label: 'Favicon only', q: '?url=https://github.com' },
@@ -34,11 +86,13 @@
       { label: 'Favicon + Value', q: '?url=https://github.com&value=Text' },
       { label: 'Favicon + Label + Value', q: '?url=https://github.com&label=GitHub&value=Text' },
       { label: 'Custom Color', q: '?url=https://github.com&label=GitHub&value=Text&color=%2300bfff' },
-      { label: 'Small Size', q: '?url=https://github.com&label=GitHub&value=Text&size=small', height: 16 },
-      { label: 'Medium Size', q: '?url=https://github.com&label=GitHub&value=Text&size=medium', height: 20 },
-      { label: 'Large Size', q: '?url=https://github.com&label=GitHub&value=Text&size=large', height: 28 },
+      { label: 'Small Size', q: '?url=https://github.com&label=GitHub&value=Text&size=small' },
+      { label: 'Medium Size', q: '?url=https://github.com&label=GitHub&value=Text&size=medium' },
+      { label: 'Large Size', q: '?url=https://github.com&label=GitHub&value=Text&size=large' },
       { label: 'Border Radius 10', q: '?url=https://github.com&label=GitHub&value=Text&radius=10' },
       { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Text&shape=parallelogram' },
+      { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Text&shape=parallelogram&size=medium' },
+      { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Text&shape=parallelogram&size=large' },
       { label: 'No Label, Only Icon (Parallelogram)', q: '?url=https://github.com&shape=parallelogram' },
     ]
     const demoDiv = document.getElementById('demo-badges')
@@ -51,11 +105,40 @@
       const img = document.createElement('img')
       img.className = 'badge-img'
       img.src = host + '/huyhieu' + d.q
-      img.height = d.height || 28
+      img.style.height = 'auto'
+      img.style.width = 'auto'
       row.appendChild(label)
       row.appendChild(img)
       demoDiv.appendChild(row)
     })
+    const labelInput = document.getElementById('input-label')
+    const valueInput = document.getElementById('input-value')
+    const updateBtn = document.getElementById('update-btn')
+    const clearBtn = document.getElementById('clear-btn')
+    const resetBtn = document.getElementById('reset-btn')
+    updateBtn.onclick = function () {
+      const labelVal = encodeURIComponent(labelInput.value)
+      const valueVal = encodeURIComponent(valueInput.value)
+      demos.forEach((d, i) => {
+        let url = host + '/huyhieu' + d.q
+        url = url.replace(/([&?])label=[^&]*/g, '')
+        url = url.replace(/([&?])value=[^&]*/g, '')
+        if (labelVal) url += (url.includes('?') ? '&' : '?') + 'label=' + labelVal
+        if (valueVal) url += (url.includes('?') ? '&' : '?') + 'value=' + valueVal
+        demoDiv.children[i].querySelector('img').src = url
+      })
+    }
+    clearBtn.onclick = function () {
+      labelInput.value = ''
+      valueInput.value = ''
+      updateBtn.onclick()
+    }
+    resetBtn.onclick = function() {
+      labelInput.value = 'GitHub'
+      valueInput.value = 'Text'
+      updateBtn.onclick()
+    }
   </script>
 </body>
+
 </html>
