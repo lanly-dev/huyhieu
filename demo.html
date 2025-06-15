@@ -31,19 +31,16 @@
       { label: 'Default', q: '' },
       { label: 'Favicon only', q: '?url=https://github.com' },
       { label: 'Favicon + Label', q: '?url=https://github.com&label=GitHub' },
-      { label: 'Favicon + Value', q: '?url=https://github.com&value=Online' },
-      { label: 'Favicon + Label + Value', q: '?url=https://github.com&label=GitHub&value=Online' },
+      { label: 'Favicon + Value', q: '?url=https://github.com&value=Text' },
+      { label: 'Favicon + Label + Value', q: '?url=https://github.com&label=GitHub&value=Text' },
       { label: 'Custom Color', q: '?url=https://github.com&label=GitHub&value=Text&color=%2300bfff' },
       { label: 'Small Size', q: '?url=https://github.com&label=GitHub&value=Text&size=small', height: 16 },
       { label: 'Medium Size', q: '?url=https://github.com&label=GitHub&value=Text&size=medium', height: 20 },
       { label: 'Large Size', q: '?url=https://github.com&label=GitHub&value=Text&size=large', height: 28 },
       { label: 'Border Radius 10', q: '?url=https://github.com&label=GitHub&value=Text&radius=10' },
       { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Text&shape=parallelogram' },
-      { label: 'Rect', q: '?url=https://github.com&label=GitHub&value=Text&shape=rect' },
-      { label: 'Arrow', q: '?url=https://github.com&label=GitHub&value=Text&shape=arrow' },
       { label: 'No Label, Only Icon (Parallelogram)', q: '?url=https://github.com&shape=parallelogram' },
-      { label: 'No Label, Only Icon (Rect)', q: '?url=https://github.com' }
-    ];
+    ]
     const demoDiv = document.getElementById('demo-badges')
     demos.forEach(d => {
       const row = document.createElement('div')

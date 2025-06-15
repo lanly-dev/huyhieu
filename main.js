@@ -94,14 +94,29 @@ app.get('/huyhieu', async (c) => {
 
   let labelText = label
   let valueText = value
-  if (!labelText && !valueText) {
+  if (!labelText && !valueText && !faviconDataUrl) {
     labelText = 'huy'
     valueText = 'hieu'
   }
-  const labelWidth = labelText ? labelText.length * s.fontSize : 0
+  let labelWidth = labelText ? labelText.length * s.fontSize : 0
   const valueWidth = valueText ? valueText.length * s.fontSize : 0
-  const iconPadL = labelText ? 4 : 0 // Left padding if label present
-  const iconPadR = (!labelText && shape === 'parallelogram') ? 4 : 0 // Right padding if no label and parallelogram
+  if (faviconDataUrl && labelText) {
+    if (shape === 'rect') {
+      if (size === 'large') labelWidth -= 30
+      else labelWidth -= 15
+    } else if (shape === 'parallelogram') {
+      if (size === 'large') labelWidth -= 25
+      else labelWidth -= 10
+    }
+  }
+
+  let iconPadL = 4
+  const iconPadR = 4
+
+  if (shape === 'parallelogram' && faviconDataUrl) {
+    labelWidth += 12
+    iconPadL = 0
+  }
   const iconLabelPad = 4 // Padding between icon and label
   const iconWidth = faviconDataUrl ? s.icon + iconPadL + iconPadR : 0
   const totalWidth = labelWidth + valueWidth + iconWidth || s.height * 2
@@ -113,9 +128,9 @@ app.get('/huyhieu', async (c) => {
   let iconX = 10
   let labelTextX = faviconDataUrl ? s.icon + iconLabelPad : labelWidth / 2
   if (shape === 'parallelogram') {
-    badgeBg = `<polygon points='${slant},0 ${totalWidth},0 ${totalWidth-slant},${s.height} 0,${s.height}' fill="#eee"/>`
+    badgeBg = `<polygon points='${slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} 0,${s.height}' fill="#eee"/>`
     if (valueText) {
-      valueBg = `<polygon points='${labelWidth+iconWidth+slant},0 ${totalWidth},0 ${totalWidth-slant},${s.height} ${labelWidth+iconWidth},${s.height}' fill='${color}'/>`
+      valueBg = `<polygon points='${labelWidth + iconWidth + slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} ${labelWidth + iconWidth},${s.height}' fill='${color}'/>`
     }
     iconX = slant + iconPadL
     labelTextX = faviconDataUrl ? slant + s.icon + iconPadL + iconLabelPad : slant + labelWidth / 2
