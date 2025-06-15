@@ -25,10 +25,7 @@
       if(document.body.classList.contains('dark')) btn.textContent = 'Switch to Light'
       else btn.textContent = 'Switch to Dark'
     }
-    // Dynamic badge URLs
-    let host;
-    if (window.location.protocol === 'file:') host = 'http://localhost:8000'
-    else host = window.location.origin;
+    const host = 'http://localhost:8000'
     document.getElementById('host-label').textContent = host;
     const demos = [
       { label: 'Default', q: '' },
@@ -36,14 +33,14 @@
       { label: 'Favicon + Label', q: '?url=https://github.com&label=GitHub' },
       { label: 'Favicon + Value', q: '?url=https://github.com&value=Online' },
       { label: 'Favicon + Label + Value', q: '?url=https://github.com&label=GitHub&value=Online' },
-      { label: 'Custom Color', q: '?url=https://github.com&label=GitHub&value=Online&color=%2300bfff' },
-      { label: 'Small Size', q: '?url=https://github.com&label=GitHub&value=Online&size=small', height: 16 },
-      { label: 'Medium Size', q: '?url=https://github.com&label=GitHub&value=Online&size=medium', height: 20 },
-      { label: 'Large Size', q: '?url=https://github.com&label=GitHub&value=Online&size=large', height: 28 },
-      { label: 'Border Radius 10', q: '?url=https://github.com&label=GitHub&value=Online&radius=10' },
-      { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Online&shape=parallelogram' },
-      { label: 'Rect', q: '?url=https://github.com&label=GitHub&value=Online&shape=rect' },
-      { label: 'Arrow', q: '?url=https://github.com&label=GitHub&value=Online&shape=arrow' },
+      { label: 'Custom Color', q: '?url=https://github.com&label=GitHub&value=Text&color=%2300bfff' },
+      { label: 'Small Size', q: '?url=https://github.com&label=GitHub&value=Text&size=small', height: 16 },
+      { label: 'Medium Size', q: '?url=https://github.com&label=GitHub&value=Text&size=medium', height: 20 },
+      { label: 'Large Size', q: '?url=https://github.com&label=GitHub&value=Text&size=large', height: 28 },
+      { label: 'Border Radius 10', q: '?url=https://github.com&label=GitHub&value=Text&radius=10' },
+      { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Text&shape=parallelogram' },
+      { label: 'Rect', q: '?url=https://github.com&label=GitHub&value=Text&shape=rect' },
+      { label: 'Arrow', q: '?url=https://github.com&label=GitHub&value=Text&shape=arrow' },
       { label: 'No Label, Only Icon (Parallelogram)', q: '?url=https://github.com&shape=parallelogram' },
       { label: 'No Label, Only Icon (Rect)', q: '?url=https://github.com' }
     ];

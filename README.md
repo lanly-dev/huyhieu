@@ -30,13 +30,13 @@ A simple, flat, and minimalistic badge generator that can embed a website's favi
 ### Examples
 - Only favicon: `/huyhieu?url=https://github.com` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com)
 - Favicon + label: `/huyhieu?url=https://github.com&label=GitHub` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub)
-- Favicon + value: `/huyhieu?url=https://github.com&value=Online` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&value=Online)
-- Favicon + both: `/huyhieu?url=https://github.com&label=GitHub&value=Online` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online)
-- Custom color: `/huyhieu?url=https://github.com&label=GitHub&value=Online&color=%2300bfff` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&color=%2300bfff)
-- Small size: `/huyhieu?url=https://github.com&label=GitHub&value=Online&size=small` ![Small badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&size=small)
-- Large size: `/huyhieu?url=https://github.com&label=GitHub&value=Online&size=large` ![Large badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&size=large)
-- Custom border radius: `/huyhieu?url=https://github.com&label=GitHub&value=Online&radius=10` ![Radius badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&radius=10)
-- **Parallelogram shape:** `/huyhieu?url=https://github.com&label=GitHub&value=Online&shape=parallelogram` ![Parallelogram badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Online&shape=parallelogram)
+- Favicon + value: `/huyhieu?url=https://github.com&value=Text` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&value=Text)
+- Favicon + both: `/huyhieu?url=https://github.com&label=GitHub&value=Text` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Text)
+- Custom color: `/huyhieu?url=https://github.com&label=GitHub&value=Text&color=%2300bfff` ![Example badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Text&color=%2300bfff)
+- Small size: `/huyhieu?url=https://github.com&label=GitHub&value=Text&size=small` ![Small badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Text&size=small)
+- Large size: `/huyhieu?url=https://github.com&label=GitHub&value=Text&size=large` ![Large badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Text&size=large)
+- Custom border radius: `/huyhieu?url=https://github.com&label=GitHub&value=Text&radius=10` ![Radius badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Text&radius=10)
+- **Parallelogram shape:** `/huyhieu?url=https://github.com&label=GitHub&value=Text&shape=parallelogram` ![Parallelogram badge](https://huyhieu.val.run/huyhieu?url=https://github.com&label=GitHub&value=Text&shape=parallelogram)
 - Default (no params): `/huyhieu` → shows 'huy hieu' ![Example badge](https://huyhieu.val.run/huyhieu)
 
 ## Development
