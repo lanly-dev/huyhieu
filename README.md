@@ -10,9 +10,8 @@ A simple, flat, and minimalistic badge generator that can embed a website's favi
 - Customizable label and value text
 - Three badge sizes: small, medium, large
 - Customizable border radius (default: 0)
-- Parallelogram shape
-- Sensible defaults (shows 'huy hieu' if no text provided)
-- Fast and lightweight
+- Parallelogram shape support
+- VS Code Marketplace integration
 
 ### HuyHieu API
 ```
@@ -38,6 +37,26 @@ A simple, flat, and minimalistic badge generator that can embed a website's favi
 - Custom border radius: `/huyhieu?url=github.com&label=GitHub&value=Text&radius=10` ![Radius badge](https://huyhieu.val.run/huyhieu?url=github.com&label=GitHub&value=Text&radius=10)
 - Parallelogram shape: `/huyhieu?url=github.com&label=GitHub&value=Text&shape=parallelogram` ![Parallelogram badge](https://huyhieu.val.run/huyhieu?url=github.com&label=GitHub&value=Text&shape=parallelogram)
 - Default (no params): `/huyhieu` → shows 'huy hieu' ![Example badge](https://huyhieu.val.run/huyhieu)
+
+## VS Marketplace
+```
+/huyhieu/vsmarketplace/<statType>/<namespace>?label=<true|false>&color=<color>&size=<size>&shape=<shape>
+```
+
+#### Parameters
+- `statType`: The type of statistic to display
+  - `download` / `install` - Total installations (173M)
+  - `rating` - Average rating (4.2)
+- `namespace`: Extension identifier (e.g., `ms-python.python`)
+- `label` (optional): Show label text (default: `true`)
+- `color`, `size`, `shape`, etc.: Same styling options as regular badges
+
+#### VS Marketplace Examples
+- Downloads: `/huyhieu/vsmarketplace/download/ms-python.python` ![Downloads](https://huyhieu.val.run/huyhieu/vsmarketplace/download/ms-python.python)
+- Installs: `/huyhieu/vsmarketplace/install/ms-python.python` ![install](https://huyhieu.val.run/huyhieu/vsmarketplace/install/ms-python.python)
+- Rating: `/huyhieu/vsmarketplace/rating/ms-python.python` ![Rating](https://huyhieu.val.run/huyhieu/vsmarketplace/rating/ms-python.python)
+- No Label: `/huyhieu/vsmarketplace/download/ms-python.python?label=false` ![No Label](https://huyhieu.val.run/huyhieu/vsmarketplace/download/ms-python.python?label=false)
+- Custom Style: `/huyhieu/vsmarketplace/download/ms-python.python?color=purple&shape=parallelogram` ![Custom](https://huyhieu.val.run/huyhieu/vsmarketplace/download/ms-python.python?color=purple&size=large&shape=parallelogram)
 
 ## Development
 - Requires [Deno](https://deno.com/)
