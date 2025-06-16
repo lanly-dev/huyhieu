@@ -101,7 +101,7 @@ app.get('/huyhieu', async (c) => {
   // Use monospace font for easy width calculation
   const fontFamily = 'monospace'
   const monospaceFactor = 0.6 // adjust if needed for your font
-  const labelWidth = labelText ? labelText.length * s.fontSize * monospaceFactor : 0
+  let labelWidth = labelText ? labelText.length * s.fontSize * monospaceFactor : 0
   let valueWidth = valueText ? valueText.length * s.fontSize * monospaceFactor : 0
   let iconPadL = 4
   const iconPadR = 4
@@ -121,17 +121,18 @@ app.get('/huyhieu', async (c) => {
     iconPadL = labelText ? 0 : 3
     totalWidth += slant + 6
     valueWidth += slant + 4
-    badgeBg = `<polygon points='${slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} 0,${s.height}' fill="#eee"/>`
-    if (valueText) {
-      valueBg = `<polygon points='${labelWidth + iconWidth + slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} ${labelWidth + iconWidth},${s.height}' fill='${color}'/>`
+    if (!faviconDataUrl) {
+      labelWidth += 5
+      totalWidth += 3
     }
+    // End fix
+    badgeBg = `<polygon points='${slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} 0,${s.height}' fill="#eee"/>`
+    if (valueText)  valueBg = `<polygon points='${labelWidth + iconWidth + slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} ${labelWidth + iconWidth},${s.height}' fill='${color}'/>`
     iconX = slant + iconPadL
-    labelTextX = faviconDataUrl ? slant + s.icon + iconPadL + iconLabelPad : slant + labelWidth / 2
+    labelTextX = faviconDataUrl ? slant + s.icon + iconPadL + iconLabelPad : slant + labelWidth / 2 - 4 // 4 is label padding without icon
   } else {
     badgeBg = `<rect width='${totalWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='#eee' />`
-    if (valueText) {
-      valueBg = `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='${color}'/>`
-    }
+    if (valueText) valueBg = `<rect x='${labelWidth + iconWidth}' width='${valueWidth}' height='${s.height}' rx='${borderRadius}' ry='${borderRadius}' fill='${color}'/>`
     iconX = iconPadL
     labelTextX = faviconDataUrl ? s.icon + iconPadL + iconLabelPad : labelWidth / 2
   }

@@ -25,13 +25,29 @@
 
     .demo-row {
       margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: 150px auto 1fr;
+      gap: 1rem;
+      align-items: center;
     }
 
     .demo-label {
       display: inline-block;
-      width: 220px;
+      width: 150px;
       vertical-align: top;
+      font-weight: bold;
     }
+
+    .demo-url {
+      font-family: monospace;
+      font-size: 0.9em;
+      background: rgba(0, 0, 0, 0.1);
+      padding: 0.2em 0.5em;
+      border-radius: 4px;
+      word-break: break-all;
+      width: 500px;
+    }
+
 
     .badge-img {
       background: #fff;
@@ -55,6 +71,10 @@
       background: #222;
       color: #fff;
       border-color: #444;
+    }
+
+    body.dark .demo-url {
+      background: rgba(255, 255, 255, 0.1);
     }
   </style>
 </head>
@@ -122,7 +142,9 @@
         if (labelVal) url += (url.includes('?') ? '&' : '?') + 'label=' + labelVal
         if (valueVal) url += (url.includes('?') ? '&' : '?') + 'value=' + valueVal
         if (shapeQ) url += shapeQ
-        demoDiv.children[i].querySelector('img').src = url
+        const row = demoDiv.children[i]
+        row.querySelector('img').src = url
+        row.querySelector('.demo-url').textContent = url.replace(host, '')
       })
     }
     shapeRadios.forEach(radio => radio.addEventListener('change', updateBadges))
@@ -151,7 +173,11 @@
       img.src = host + '/huyhieu' + d.q
       img.style.height = 'auto'
       img.style.width = 'auto'
+      const urlSpan = document.createElement('span')
+      urlSpan.className = 'demo-url'
+      urlSpan.textContent = '/huyhieu' + d.q
       row.appendChild(label)
+      row.appendChild(urlSpan)
       row.appendChild(img)
       demoDiv.appendChild(row)
     })
