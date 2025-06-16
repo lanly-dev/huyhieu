@@ -83,8 +83,12 @@
   <button class="toggle-btn" onclick="toggleBg()">Switch to Dark</button>
   <h1>HuyHieu Badge Visual Test (<span id="host-label"></span>)</h1>
   <div style="margin-bottom:1.5rem">
+    <label>URL: <input id="input-url" type="text" style="width:200px" value="github.com"
+        placeholder="Website URL"></label><br><br>
     <label>Label: <input id="input-label" type="text" style="width:120px" value="GitHub"></label>
     <label style="margin-left:1em">Value: <input id="input-value" type="text" style="width:120px" value="Text"></label>
+    <label style="margin-left:1em">Color: <input id="input-color" type="text" style="width:80px" value="red"
+        placeholder="green or #00bfff"></label>
     <span style="margin-left:1em">Shape:
       <label><input type="radio" name="shape" value="rect" checked> Rect</label>
       <label><input type="radio" name="shape" value="parallelogram"> Parallelogram</label>
@@ -95,8 +99,10 @@
   </div>
   <div id="demo-badges"></div>
   <script>
+    const urlInput = document.getElementById('input-url')
     const labelInput = document.getElementById('input-label')
     const valueInput = document.getElementById('input-value')
+    const colorInput = document.getElementById('input-color')
     const updateBtn = document.getElementById('update-btn')
     const clearBtn = document.getElementById('clear-btn')
     const resetBtn = document.getElementById('reset-btn')
@@ -112,36 +118,66 @@
     function getSelectedShape() {
       return Array.from(shapeRadios).find(r => r.checked)?.value || 'rect'
     }
-    // Only keep parallelogram/rect as shape radio, keep other effect attributes as before
+
     const demos = [
       { label: 'Default', q: '' },
       { label: 'Favicon only', q: '?url=github.com' },
       { label: 'Favicon + Label', q: '?url=github.com&label=GitHub' },
       { label: 'Favicon + Value', q: '?url=github.com&value=Text' },
       { label: 'Favicon + Label + Value', q: '?url=github.com&label=GitHub&value=Text' },
-      { label: 'Custom Color', q: '?url=github.com&label=GitHub&value=Text&color=%2300bfff' },
+      { label: 'Custom Color', q: '?url=github.com&label=GitHub&value=Text&color=red' },
       { label: 'Small Size', q: '?url=github.com&label=GitHub&value=Text&size=small' },
       { label: 'Medium Size', q: '?url=github.com&label=GitHub&value=Text&size=medium' },
       { label: 'Large Size', q: '?url=github.com&label=GitHub&value=Text&size=large' },
       { label: 'Border Radius 10', q: '?url=github.com&label=GitHub&value=Text&radius=10' },
       { label: 'No Label, Only Icon', q: '?url=github.com' }
     ]
-    function getShapeQuery() {
-      const shape = getSelectedShape()
-      return shape === 'parallelogram' ? '&shape=parallelogram' : ''
-    }
+
     function updateBadges() {
-      const labelVal = encodeURIComponent(labelInput.value)
-      const valueVal = encodeURIComponent(valueInput.value)
-      const shapeQ = getShapeQuery()
+      const urlVal = urlInput.value.trim()
+      const labelVal = labelInput.value.trim()
+      const valueVal = valueInput.value.trim()
+      const colorVal = colorInput.value.trim()
+      const selectedShape = getSelectedShape()
+
       demos.forEach((d, i) => {
-        let url = host + '/huyhieu' + d.q
-        url = url.replace(/([&?])label=[^&]*/g, '')
-        url = url.replace(/([&?])value=[^&]*/g, '')
-        url = url.replace(/([&?])shape=[^&]*/g, '')
-        if (labelVal) url += (url.includes('?') ? '&' : '?') + 'label=' + labelVal
-        if (valueVal) url += (url.includes('?') ? '&' : '?') + 'value=' + valueVal
-        if (shapeQ) url += shapeQ
+        // Parse the original demo query to understand what params it originally had
+        const originalParams = new URLSearchParams(d.q.startsWith('?') ? d.q.slice(1) : d.q)
+        const finalParams = new URLSearchParams()
+
+        // Copy over non-user-controllable params first (size, radius, etc.)
+        for (const [key, value] of originalParams.entries()) {
+          if (!['url', 'label', 'value', 'color', 'shape'].includes(key)) {
+            finalParams.set(key, value)
+          }
+        }
+
+        // Add user-controllable params only if they were in the original demo
+        if (originalParams.has('url') && urlVal) {
+          finalParams.set('url', urlVal)
+        }
+        if (originalParams.has('label') && labelVal) {
+          finalParams.set('label', labelVal)
+        }
+        if (originalParams.has('value') && valueVal) {
+          finalParams.set('value', valueVal)
+        }
+        if (originalParams.has('color') && colorVal) {
+          finalParams.set('color', colorVal)
+        }
+
+        // Always add shape if parallelogram is selected
+        if (selectedShape === 'parallelogram') {
+          finalParams.set('shape', 'parallelogram')
+        }
+
+        // Build the final URL
+        let url = host + '/huyhieu'
+        const queryString = finalParams.toString()
+        if (queryString) {
+          url += '?' + queryString
+        }
+
         const row = demoDiv.children[i]
         row.querySelector('img').src = url
         row.querySelector('.demo-url').textContent = url.replace(host, '')
@@ -152,13 +188,20 @@
     updateBtn.onclick = updateBadges
     // Patch clear/reset
     clearBtn.onclick = function () {
+      urlInput.value = ''
       labelInput.value = ''
       valueInput.value = ''
+      colorInput.value = ''
       updateBadges()
     }
+
     resetBtn.onclick = function () {
+      urlInput.value = 'github.com'
       labelInput.value = 'GitHub'
       valueInput.value = 'Text'
+      colorInput.value = 'red'
+      // Reset shape to rect
+      document.querySelector('input[name="shape"][value="rect"]').checked = true
       updateBadges()
     }
     const demoDiv = document.getElementById('demo-badges')
