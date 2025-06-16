@@ -102,13 +102,13 @@ app.get('/huyhieu', async (c) => {
   const fontFamily = 'monospace'
   const monospaceFactor = 0.6 // adjust if needed for your font
   const labelWidth = labelText ? labelText.length * s.fontSize * monospaceFactor : 0
-  const valueWidth = valueText ? valueText.length * s.fontSize * monospaceFactor : 0
-  const iconPadL = 4
+  let valueWidth = valueText ? valueText.length * s.fontSize * monospaceFactor : 0
+  let iconPadL = 4
   const iconPadR = 4
 
   const iconLabelPad = 4 // Padding between icon and label
   const iconWidth = faviconDataUrl ? s.icon + iconPadL + iconPadR : 0
-  const totalWidth = labelWidth + valueWidth + iconWidth || s.height * 2
+  let totalWidth = labelWidth + valueWidth + iconWidth || s.height * 2
 
   // Calculate parallelogram points
   const slant = Math.round(s.height * 0.5)
@@ -117,6 +117,10 @@ app.get('/huyhieu', async (c) => {
   let iconX = 10
   let labelTextX = faviconDataUrl ? s.icon + iconLabelPad : labelWidth / 2
   if (shape === 'parallelogram') {
+    // Fix some spacing issues
+    iconPadL = labelText ? 0 : 3
+    totalWidth += slant + 6
+    valueWidth += slant + 4
     badgeBg = `<polygon points='${slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} 0,${s.height}' fill="#eee"/>`
     if (valueText) {
       valueBg = `<polygon points='${labelWidth + iconWidth + slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} ${labelWidth + iconWidth},${s.height}' fill='${color}'/>`

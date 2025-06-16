@@ -65,12 +65,21 @@
   <div style="margin-bottom:1.5rem">
     <label>Label: <input id="input-label" type="text" style="width:120px" value="GitHub"></label>
     <label style="margin-left:1em">Value: <input id="input-value" type="text" style="width:120px" value="Text"></label>
+    <span style="margin-left:1em">Shape:
+      <label><input type="radio" name="shape" value="rect" checked> Rect</label>
+      <label><input type="radio" name="shape" value="parallelogram"> Parallelogram</label>
+    </span>
     <button id="update-btn" style="margin-left:1em">Update All</button>
     <button id="reset-btn" style="margin-left:0.5em">Reset</button>
     <button id="clear-btn" style="margin-left:0.5em">Clear</button>
   </div>
   <div id="demo-badges"></div>
   <script>
+    const labelInput = document.getElementById('input-label')
+    const valueInput = document.getElementById('input-value')
+    const updateBtn = document.getElementById('update-btn')
+    const clearBtn = document.getElementById('clear-btn')
+    const resetBtn = document.getElementById('reset-btn')
     function toggleBg() {
       document.body.classList.toggle('dark')
       const btn = document.querySelector('.toggle-btn');
@@ -79,6 +88,11 @@
     }
     const host = 'http://localhost:8000'
     document.getElementById('host-label').textContent = host
+    const shapeRadios = document.querySelectorAll('input[name="shape"]')
+    function getSelectedShape() {
+      return Array.from(shapeRadios).find(r => r.checked)?.value || 'rect'
+    }
+    // Only keep parallelogram/rect as shape radio, keep other effect attributes as before
     const demos = [
       { label: 'Default', q: '' },
       { label: 'Favicon only', q: '?url=https://github.com' },
@@ -90,11 +104,41 @@
       { label: 'Medium Size', q: '?url=https://github.com&label=GitHub&value=Text&size=medium' },
       { label: 'Large Size', q: '?url=https://github.com&label=GitHub&value=Text&size=large' },
       { label: 'Border Radius 10', q: '?url=https://github.com&label=GitHub&value=Text&radius=10' },
-      { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Text&shape=parallelogram' },
-      { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Text&shape=parallelogram&size=medium' },
-      { label: 'Parallelogram', q: '?url=https://github.com&label=GitHub&value=Text&shape=parallelogram&size=large' },
-      { label: 'No Label, Only Icon (Parallelogram)', q: '?url=https://github.com&shape=parallelogram' },
+      { label: 'No Label, Only Icon', q: '?url=https://github.com' }
     ]
+    function getShapeQuery() {
+      const shape = getSelectedShape()
+      return shape === 'parallelogram' ? '&shape=parallelogram' : ''
+    }
+    function updateBadges() {
+      const labelVal = encodeURIComponent(labelInput.value)
+      const valueVal = encodeURIComponent(valueInput.value)
+      const shapeQ = getShapeQuery()
+      demos.forEach((d, i) => {
+        let url = host + '/huyhieu' + d.q
+        url = url.replace(/([&?])label=[^&]*/g, '')
+        url = url.replace(/([&?])value=[^&]*/g, '')
+        url = url.replace(/([&?])shape=[^&]*/g, '')
+        if (labelVal) url += (url.includes('?') ? '&' : '?') + 'label=' + labelVal
+        if (valueVal) url += (url.includes('?') ? '&' : '?') + 'value=' + valueVal
+        if (shapeQ) url += shapeQ
+        demoDiv.children[i].querySelector('img').src = url
+      })
+    }
+    shapeRadios.forEach(radio => radio.addEventListener('change', updateBadges))
+    // Patch updateBtn to use updateBadges
+    updateBtn.onclick = updateBadges
+    // Patch clear/reset
+    clearBtn.onclick = function () {
+      labelInput.value = ''
+      valueInput.value = ''
+      updateBadges()
+    }
+    resetBtn.onclick = function () {
+      labelInput.value = 'GitHub'
+      valueInput.value = 'Text'
+      updateBadges()
+    }
     const demoDiv = document.getElementById('demo-badges')
     demos.forEach(d => {
       const row = document.createElement('div')
@@ -111,33 +155,6 @@
       row.appendChild(img)
       demoDiv.appendChild(row)
     })
-    const labelInput = document.getElementById('input-label')
-    const valueInput = document.getElementById('input-value')
-    const updateBtn = document.getElementById('update-btn')
-    const clearBtn = document.getElementById('clear-btn')
-    const resetBtn = document.getElementById('reset-btn')
-    updateBtn.onclick = function () {
-      const labelVal = encodeURIComponent(labelInput.value)
-      const valueVal = encodeURIComponent(valueInput.value)
-      demos.forEach((d, i) => {
-        let url = host + '/huyhieu' + d.q
-        url = url.replace(/([&?])label=[^&]*/g, '')
-        url = url.replace(/([&?])value=[^&]*/g, '')
-        if (labelVal) url += (url.includes('?') ? '&' : '?') + 'label=' + labelVal
-        if (valueVal) url += (url.includes('?') ? '&' : '?') + 'value=' + valueVal
-        demoDiv.children[i].querySelector('img').src = url
-      })
-    }
-    clearBtn.onclick = function () {
-      labelInput.value = ''
-      valueInput.value = ''
-      updateBtn.onclick()
-    }
-    resetBtn.onclick = function() {
-      labelInput.value = 'GitHub'
-      valueInput.value = 'Text'
-      updateBtn.onclick()
-    }
   </script>
 </body>
 
