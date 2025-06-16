@@ -87,7 +87,7 @@
         placeholder="Website URL"></label><br><br>
     <label>Label: <input id="input-label" type="text" style="width:120px" value="GitHub"></label>
     <label style="margin-left:1em">Value: <input id="input-value" type="text" style="width:120px" value="Text"></label>
-    <label style="margin-left:1em">Color: <input id="input-color" type="text" style="width:80px" value="red"
+    <label style="margin-left:1em">Color: <input id="input-color" type="text" style="width:80px" value="blue"
         placeholder="green or #00bfff"></label>
     <span style="margin-left:1em">Shape:
       <label><input type="radio" name="shape" value="rect" checked> Rect</label>
@@ -125,7 +125,7 @@
       { label: 'Favicon + Label', q: '?url=github.com&label=GitHub' },
       { label: 'Favicon + Value', q: '?url=github.com&value=Text' },
       { label: 'Favicon + Label + Value', q: '?url=github.com&label=GitHub&value=Text' },
-      { label: 'Custom Color', q: '?url=github.com&label=GitHub&value=Text&color=red' },
+      { label: 'Custom Color', q: '?url=github.com&label=GitHub&value=Text&color=blue&textcolor=cyan' },
       { label: 'Small Size', q: '?url=github.com&label=GitHub&value=Text&size=small' },
       { label: 'Medium Size', q: '?url=github.com&label=GitHub&value=Text&size=medium' },
       { label: 'Large Size', q: '?url=github.com&label=GitHub&value=Text&size=large' },
@@ -199,7 +199,7 @@
       urlInput.value = 'github.com'
       labelInput.value = 'GitHub'
       valueInput.value = 'Text'
-      colorInput.value = 'red'
+      colorInput.value = 'blue'
       // Reset shape to rect
       document.querySelector('input[name="shape"][value="rect"]').checked = true
       updateBadges()

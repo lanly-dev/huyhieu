@@ -55,18 +55,17 @@ app.get('/', (c) =>
     </html>
   `)
 )
-app.get('/yeah', (c) => c.text('Routing!'))
 
 // Badge service route
 app.get('/huyhieu', async (c) => {
   const color = c.req.query('color') ?? 'green'
-  const textColor = c.req.query('text') ?? 'white'
+  const textColor = c.req.query('textcolor') ?? 'white'
   const siteUrl = c.req.query('url')
   const label = c.req.query('label') ?? ''
   const value = c.req.query('value') ?? ''
   const size = c.req.query('size') ?? 'small'
   const radiusParam = c.req.query('radius')
-  const shape = c.req.query('shape') ?? 'rect' // rect, trapezoid, right-trapezoid, middle-trapezoid, parallelogram
+  const shape = c.req.query('shape') ?? 'rect' // rect, parallelogram
   let faviconDataUrl = null
 
   const sizeMap = {
