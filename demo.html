@@ -128,9 +128,16 @@
       { label: 'Custom Color', q: '?url=github.com&label=GitHub&value=Text&color=blue&textcolor=cyan' },
       { label: 'Small Size', q: '?url=github.com&label=GitHub&value=Text&size=small' },
       { label: 'Medium Size', q: '?url=github.com&label=GitHub&value=Text&size=medium' },
-      { label: 'Large Size', q: '?url=github.com&label=GitHub&value=Text&size=large' },
-      { label: 'Border Radius 10', q: '?url=github.com&label=GitHub&value=Text&radius=10' },
-      { label: 'No Label, Only Icon', q: '?url=github.com' }
+      { label: 'Large Size', q: '?url=github.com&label=GitHub&value=Text&size=large' }, { label: 'Border Radius 10', q: '?url=github.com&label=GitHub&value=Text&radius=10' },
+
+    ]
+    // VS Marketplace demos - separate array for different route
+    const vsMarketplaceDemos = [
+      { label: 'VS Code Extension Downloads', q: '/vsmarketplace/download/ms-python.python' },
+      { label: 'VS Code Extension Installs', q: '/vsmarketplace/install/ms-python.python' },
+      { label: 'VS Code Extension Rating', q: '/vsmarketplace/rating/ms-python.python' },
+      { label: 'Downloads (No Label)', q: '/vsmarketplace/download/ms-python.python?label=false' },
+      { label: 'Downloads (Parallelogram)', q: '/vsmarketplace/download/ms-python.python?shape=parallelogram' }
     ]
 
     function updateBadges() {
@@ -140,6 +147,7 @@
       const colorVal = colorInput.value.trim()
       const selectedShape = getSelectedShape()
 
+      // Update regular badges only (first section)
       demos.forEach((d, i) => {
         // Parse the original demo query to understand what params it originally had
         const originalParams = new URLSearchParams(d.q.startsWith('?') ? d.q.slice(1) : d.q)
@@ -178,9 +186,32 @@
           url += '?' + queryString
         }
 
-        const row = demoDiv.children[i]
-        row.querySelector('img').src = url
-        row.querySelector('.demo-url').textContent = url.replace(host, '')
+        // Skip the headers when looking for badge rows
+        const badgeRows = Array.from(demoDiv.children).filter(child => child.className === 'demo-row')
+        const row = badgeRows[i]
+        if (row) {
+          row.querySelector('img').src = url
+          row.querySelector('.demo-url').textContent = url.replace(host, '')
+        }
+      })
+
+      // Update VS Marketplace badges (only apply shape changes)
+      vsMarketplaceDemos.forEach((d, i) => {
+        let url = host + '/huyhieu' + d.q
+
+        // Add shape parameter if parallelogram is selected and not already present
+        if (selectedShape === 'parallelogram' && !d.q.includes('shape=')) {
+          const separator = d.q.includes('?') ? '&' : '?'
+          url += separator + 'shape=parallelogram'
+        }
+
+        // VS Marketplace badges start after regular badges + 2 headers
+        const badgeRows = Array.from(demoDiv.children).filter(child => child.className === 'demo-row')
+        const row = badgeRows[demos.length + i]
+        if (row) {
+          row.querySelector('img').src = url
+          row.querySelector('.demo-url').textContent = url.replace(host, '')
+        }
       })
     }
     shapeRadios.forEach(radio => radio.addEventListener('change', updateBadges))
@@ -204,8 +235,44 @@
       document.querySelector('input[name="shape"][value="rect"]').checked = true
       updateBadges()
     }
+
     const demoDiv = document.getElementById('demo-badges')
+
+    // Add section header for regular badges
+    const regularHeader = document.createElement('h2')
+    regularHeader.textContent = 'Regular Badges'
+    regularHeader.style.marginTop = '2rem'
+    regularHeader.style.marginBottom = '1rem'
+    demoDiv.appendChild(regularHeader)
+
     demos.forEach(d => {
+      const row = document.createElement('div')
+      row.className = 'demo-row'
+      const label = document.createElement('span')
+      label.className = 'demo-label'
+      label.textContent = d.label
+      const img = document.createElement('img')
+      img.className = 'badge-img'
+      img.src = host + '/huyhieu' + d.q
+      img.style.height = 'auto'
+      img.style.width = 'auto'
+      const urlSpan = document.createElement('span')
+      urlSpan.className = 'demo-url'
+      urlSpan.textContent = '/huyhieu' + d.q
+      row.appendChild(label)
+      row.appendChild(urlSpan)
+      row.appendChild(img)
+      demoDiv.appendChild(row)
+    })
+
+    // Add section header for VS Marketplace badges
+    const vsHeader = document.createElement('h2')
+    vsHeader.textContent = 'VS Marketplace Download Badges'
+    vsHeader.style.marginTop = '2rem'
+    vsHeader.style.marginBottom = '1rem'
+    demoDiv.appendChild(vsHeader)
+
+    vsMarketplaceDemos.forEach(d => {
       const row = document.createElement('div')
       row.className = 'demo-row'
       const label = document.createElement('span')
