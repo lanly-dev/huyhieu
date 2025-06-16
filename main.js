@@ -79,7 +79,7 @@ app.get('/huyhieu', async (c) => {
 
   if (siteUrl) {
     try {
-      const urlObj = new URL(siteUrl)
+      const urlObj = new URL('https://' + siteUrl)
       const faviconUrl = `${urlObj.origin}/favicon.ico`
       const res = await fetch(faviconUrl)
       if (res.ok) {
@@ -89,11 +89,13 @@ app.get('/huyhieu', async (c) => {
       }
     } catch {
       console.error('HuyHieu: Failed to fetch favicon:', siteUrl)
+      faviconDataUrl = null // Fallback to no favicon if fetch fails
     }
   }
 
   let labelText = label
   let valueText = value
+
   if (!labelText && !valueText && !faviconDataUrl) {
     labelText = 'huy'
     valueText = 'hieu'
@@ -127,7 +129,7 @@ app.get('/huyhieu', async (c) => {
     }
     // End fix
     badgeBg = `<polygon points='${slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} 0,${s.height}' fill="#eee"/>`
-    if (valueText)  valueBg = `<polygon points='${labelWidth + iconWidth + slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} ${labelWidth + iconWidth},${s.height}' fill='${color}'/>`
+    if (valueText) valueBg = `<polygon points='${labelWidth + iconWidth + slant},0 ${totalWidth},0 ${totalWidth - slant},${s.height} ${labelWidth + iconWidth},${s.height}' fill='${color}'/>`
     iconX = slant + iconPadL
     labelTextX = faviconDataUrl ? slant + s.icon + iconPadL + iconLabelPad : slant + labelWidth / 2 - 4 // 4 is label padding without icon
   } else {
