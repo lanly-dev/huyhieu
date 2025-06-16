@@ -98,26 +98,14 @@ app.get('/huyhieu', async (c) => {
     labelText = 'huy'
     valueText = 'hieu'
   }
-  let labelWidth = labelText ? labelText.length * s.fontSize : 0
-  const valueWidth = valueText ? valueText.length * s.fontSize : 0
-  if (faviconDataUrl && labelText) {
-    if (shape === 'rect') {
-      if (size === 'large') labelWidth -= 30
-      else labelWidth -= 15
-    } else if (shape === 'parallelogram') {
-      if (size === 'small') labelWidth -= 15
-      else if (size === 'medium') labelWidth -= 20
-      else labelWidth -= 25
-    }
-  }
-
-  let iconPadL = 4
+  // Use monospace font for easy width calculation
+  const fontFamily = 'monospace'
+  const monospaceFactor = 0.6 // adjust if needed for your font
+  const labelWidth = labelText ? labelText.length * s.fontSize * monospaceFactor : 0
+  const valueWidth = valueText ? valueText.length * s.fontSize * monospaceFactor : 0
+  const iconPadL = 4
   const iconPadR = 4
 
-  if (shape === 'parallelogram' && faviconDataUrl) {
-    labelWidth += 12
-    iconPadL = 0
-  }
   const iconLabelPad = 4 // Padding between icon and label
   const iconWidth = faviconDataUrl ? s.icon + iconPadL + iconPadR : 0
   const totalWidth = labelWidth + valueWidth + iconWidth || s.height * 2
@@ -144,20 +132,19 @@ app.get('/huyhieu', async (c) => {
     labelTextX = faviconDataUrl ? s.icon + iconPadL + iconLabelPad : labelWidth / 2
   }
 
-  return new Response(
-    `
-    <svg xmlns='http://www.w3.org/2000/svg' width='${totalWidth}' height='${s.height}' style='font-family:Verdana,sans-serif;font-size:${s.fontSize}px;'>
+  const svg = `
+    <svg xmlns='http://www.w3.org/2000/svg' width='${totalWidth}' height='${s.height}' style='font-family:${fontFamily};font-size:${s.fontSize}px;'>
       ${badgeBg}
       ${valueBg}
       ${faviconDataUrl ? `<image x='${iconX}' y='${Math.round((s.height - s.icon) / 2)}' width='${s.icon}' height='${s.icon}' href='${faviconDataUrl}'/>` : ''}
       ${labelText ? `<text x='${labelTextX}' y='${s.y}' fill='#333' text-anchor='${faviconDataUrl ? 'start' : 'middle'}'>${labelText}</text>` : ''}
       ${valueText ? `<text x='${labelWidth + iconWidth + valueWidth / 2}' y='${s.y}' fill='${textColor}' text-anchor='middle'>${valueText}</text>` : ''}
     </svg>
-    `,
-    {
-      headers: { 'Content-Type': 'image/svg+xml' }
-    }
-  )
+  `
+
+  return new Response(svg, {
+    headers: { 'Content-Type': 'image/svg+xml' }
+  })
 })
 
 export default app.fetch

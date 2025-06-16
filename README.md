@@ -21,7 +21,7 @@ A simple, flat, and minimalistic badge generator that can embed a website's favi
 - `url` (optional): Website to fetch favicon from
 - `label` (optional): Left text (default: 'huy' if both label and value are missing)
 - `value` (optional): Right text (default: 'hieu' if both label and value are missing)
-- `color` (optional): Right bg color (default: green, supports hex codes like %2300bfff)
+- `color` (optional): Right background color (default: green, supports hex codes like %2300bfff)
 - `text` (optional): Right text color (default: white, supports hex codes)
 - `size` (optional): Badge size (`small`, `medium`, `large`, default: `small`)
 - `radius` (optional): Border radius in px (default: 0, for square corners)
