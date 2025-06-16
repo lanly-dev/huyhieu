@@ -18,7 +18,8 @@ export default defineConfig([
       'no-trailing-spaces': 'error',
       'no-unused-vars': 'warn',
       'prefer-const': 'error',
-      indent: ['error', 2],
+      'quote-props': ['error', 'as-needed'],
+      indent: { "indent": ["error", 2, { "SwitchCase": 2 }] },
       quotes: ['error', 'single'],
       semi: ['error', 'never']
     }

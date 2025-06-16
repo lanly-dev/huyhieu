@@ -116,7 +116,7 @@ app.get('/huyhieu', async (c) => {
     labelText = 'huy'
     valueText = 'hieu'
   }
-  // Use monospace font for easy width calculation
+
   const fontFamily = 'monospace'
   const monospaceFactor = 0.6 // adjust if needed for your font
   let labelWidth = labelText ? labelText.length * s.fontSize * monospaceFactor : 0
@@ -165,9 +165,7 @@ app.get('/huyhieu', async (c) => {
     </svg>
   `
 
-  return new Response(svg, {
-    headers: { 'Content-Type': 'image/svg+xml' }
-  })
+  return new Response(svg, { headers: { 'Content-Type': 'image/svg+xml' } })
 })
 
 // VS Marketplace stats badge route
@@ -189,10 +187,10 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
 
   const statConfig = statMap[statType] || statMap.download
   const label = showLabel ? statConfig.label : ''
-  let value = 'N/A'
+  let value = 'Something went wrong'
   let faviconDataUrl = null
 
-  console.log('Processing VS Marketplace request:', { namespace, statType, statConfig }) // Debug log
+  console.log('Processing VS Marketplace request:', { namespace, statType, statConfig })
 
   const sizeMap = {
     small: { fontSize: 9, height: 16, icon: 12, y: 11 },
@@ -219,15 +217,15 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
   try {
     // Use the correct VS Marketplace Gallery API with POST method
     const apiUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery/extensionquery'
-    console.log('Fetching extension stats for:', namespace) // Debug log
+    console.log('Fetching extension stats for:', namespace)
 
     const requestBody = {
       filters: [
         {
           criteria: [
             {
-              filterType: 7, // ExtensionName
-              value: namespace
+              filterType: 7,
+              value: namespace // Use the namespace as the filter value
             }
           ]
         }
@@ -238,60 +236,55 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json;api-version=6.0-preview.1',
+        Accept: 'application/json;api-version=6.0-preview.1',
         'Content-Type': 'application/json',
         'User-Agent': 'HuyHieu Badge Service'
       },
       body: JSON.stringify(requestBody)
     })
 
-    console.log('Response status:', response.status) // Debug log
+    console.log('Response status:', response.status)
 
-    if (response.ok) {
-      const data = await response.json()
-      console.log('API Response structure:', Object.keys(data)) // Debug log
-
-      if (data.results && data.results.length > 0 && data.results[0].extensions && data.results[0].extensions.length > 0) {
-        const extension = data.results[0].extensions[0]
-        console.log('Extension found:', extension.extensionName) // Debug log
-        console.log('Available statistics:', extension.statistics?.map(s => ({ name: s.statisticName, value: s.value }))) // Debug log
-
-        const targetStat = extension.statistics?.find(stat => stat.statisticName === statConfig.apiStat)
-        if (targetStat) {
-          const statValue = targetStat.value
-          console.log(`${statType} count:`, statValue) // Debug log
-
-          // Format the value based on stat type
-          if (statType === 'rating') {
-            // For rating, show as decimal (e.g., 4.2)
-            value = parseFloat(statValue).toFixed(1)
-          } else {
-            // For downloads/installs, format large numbers
-            if (statValue >= 1000000) {
-              value = (statValue / 1000000).toFixed(1) + 'M'
-            } else if (statValue >= 1000) {
-              value = (statValue / 1000).toFixed(1) + 'K'
-            } else {
-              value = statValue.toString()
-            }
-          }
-        } else {
-          console.log(`Statistic '${statConfig.apiStat}' not found. Available:`, extension.statistics?.map(s => s.statisticName)) // Debug log
-        }
-      } else {
-        console.log('No extensions found in API response') // Debug log
-      }
-    } else {
-      console.log('API request failed with status:', response.status) // Debug log
+    if (!response.ok) {
       const errorText = await response.text()
-      console.log('Error response:', errorText) // Debug log
+      statValue = errorText
+    }
+
+    const data = await response.json()
+    console.log('API Response structure:', Object.keys(data))
+
+    const extensions = data.results?.[0]?.extensions
+    if (!extensions || extensions.length === 0) {
+      console.warn('No extensions found in API response')
+      statValue = 'ExtensionNotFound'
+    }
+
+    const extension = extensions[0]
+    const targetStat = extension.statistics?.find(stat => stat.statisticName === statConfig.apiStat)
+    let statValue = targetStat?.value
+    if (!targetStat) {
+      console.log(`Statistic '${statConfig.apiStat}' not found. Available:`, extension.statistics?.map(s => s.statisticName))
+      statValue = 0
+    }
+
+    // Format the value based on stat type using switch statement
+    switch (statType) {
+      case 'rating':
+        if (!statValue) value = 'None'
+        break
+        value = parseFloat(statValue).toFixed(1)
+        break
+      case 'download':
+      case 'install':
+        if (statValue >= 1000000) value = (statValue / 1000000).toFixed(1) + 'M'
+        else if (statValue >= 1000) value = (statValue / 1000).toFixed(1) + 'K'
+        else value = statValue.toString()
     }
   } catch (error) {
     console.error('Failed to fetch VS Marketplace stats:', error)
-    value = 'N/A'
+    value = 'Error'
   }
 
-  // Use monospace font for easy width calculation
   const fontFamily = 'monospace'
   const monospaceFactor = 0.6
   let labelWidth = label.length * s.fontSize * monospaceFactor
@@ -338,9 +331,7 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
       ${value ? `<text x='${labelWidth + iconWidth + valueWidth / 2}' y='${s.y}' fill='${textColor}' text-anchor='middle'>${value}</text>` : ''}
     </svg>
   `
-  return new Response(svg, {
-    headers: { 'Content-Type': 'image/svg+xml' }
-  })
+  return new Response(svg, { headers: { 'Content-Type': 'image/svg+xml' } })
 })
 
 export default app.fetch
