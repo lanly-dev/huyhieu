@@ -70,8 +70,7 @@ app.get('/', (c) =>
       </div>
     </body>
     </html>
-  `)
-)
+  `))
 
 // Badge service route
 app.get('/huyhieu', async (c) => {
@@ -260,10 +259,10 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
     }
 
     const extension = extensions[0]
-    const targetStat = extension.statistics?.find(stat => stat.statisticName === statConfig.apiStat)
+    const targetStat = extension.statistics?.find((stat) => stat.statisticName === statConfig.apiStat)
     let statValue = targetStat?.value
     if (!targetStat) {
-      console.log(`Statistic '${statConfig.apiStat}' not found. Available:`, extension.statistics?.map(s => s.statisticName))
+      console.log(`Statistic '${statConfig.apiStat}' not found. Available:`, extension.statistics?.map((s) => s.statisticName))
       statValue = 0
     }
 

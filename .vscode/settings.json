@@ -13,5 +13,6 @@
     "valtown",
     "Verdana",
     "vsmarketplace"
-  ]
+  ],
+  "editor.rulers": [120]
 }

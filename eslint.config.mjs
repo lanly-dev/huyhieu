@@ -19,7 +19,7 @@ export default defineConfig([
       'no-unused-vars': 'warn',
       'prefer-const': 'error',
       'quote-props': ['error', 'as-needed'],
-      indent: { "indent": ["error", 2, { "SwitchCase": 2 }] },
+      indent: { 'indent': ['error', 2, { 'SwitchCase': 2 }] },
       quotes: ['error', 'single'],
       semi: ['error', 'never']
     }

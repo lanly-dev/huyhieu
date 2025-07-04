@@ -15,6 +15,14 @@
       "deno.unstable"
     ]
   },
+  "fmt": {
+    "singleQuote": true,
+    "semiColons": false,
+    "trailingCommas": "never",
+    "lineWidth": 200,
+    "indentWidth": 2,
+    "proseWrap": "preserve"
+  },
   "lint": {
     "files": {
       "include": [
