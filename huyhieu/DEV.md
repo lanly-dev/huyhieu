@@ -19,3 +19,6 @@ deno run --allow-net main.js
 
 ## Links
 https://docs.val.town/guides/prompting/cli\
+https://github.com/val-town/val-town-product/discussions\
+https://github.com/val-town/vt/issues\
+
