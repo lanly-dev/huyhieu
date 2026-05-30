@@ -1,4 +1,5 @@
 // import { Hono } from 'npm:hono@3'
+// deno-lint-ignore no-import-prefix
 import { Hono } from 'https://deno.land/x/hono@v3.12.7/mod.ts'
 import { IndexPage } from './index.jsx'
 
@@ -6,7 +7,7 @@ const app = new Hono()
 app.get('/', (_c) => IndexPage())
 
 // Badge service route
-app.get('/huyhieu', async (c) => {
+app.get('/huyhieu', async (c) => {7
   const color = c.req.query('color') ?? 'green'
   const textColor = c.req.query('textcolor') ?? 'white'
   const siteUrl = c.req.query('url')
@@ -112,9 +113,13 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
   const showLabel = c.req.query('label') !== 'false' // Default to showing label
   // Map stat types to labels and API statistic names
   const statMap = {
-    download: { label: 'downloads', apiStat: 'install' },
+    download: { label: 'downloads', apiStat: 'downloadCount' },
     install: { label: 'installs', apiStat: 'install' },
-    rating: { label: 'rating', apiStat: 'averagerating' }
+    rating: { label: 'rating', apiStat: 'averagerating' },
+    'weighted-rating': { label: 'weighted rating', apiStat: 'weightedRating' },
+    'trending-daily': { label: 'trending (24h)', apiStat: 'trendingdaily' },
+    'trending-weekly': { label: 'trending (7d)', apiStat: 'trendingweekly' },
+    'trending-monthly': { label: 'trending (30d)', apiStat: 'trendingmonthly' }
   }
 
   const statConfig = statMap[statType] || statMap.download
@@ -194,21 +199,22 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
     const extension = extensions[0]
     const targetStat = extension.statistics?.find((stat) => stat.statisticName === statConfig.apiStat)
     let statValue = targetStat?.value
-    if (!targetStat) {
-      console.log(`Statistic '${statConfig.apiStat}' not found. Available:`, extension.statistics?.map((s) => s.statisticName))
-      statValue = 0
-    }
+    if (!targetStat) statValue = 0
 
     // Format the value based on stat type using switch statement
     switch (statType) {
       case 'rating':
         if (!statValue) value = 'None'
+        else value = statValue.toFixed(1)
         break
       case 'download':
       case 'install':
         if (statValue >= 1000000) value = (statValue / 1000000).toFixed(1) + 'M'
         else if (statValue >= 1000) value = (statValue / 1000).toFixed(1) + 'K'
         else value = statValue.toString()
+        break
+      default:
+        value = statValue.toString()
     }
   } catch (error) {
     console.error('Failed to fetch VS Marketplace stats:', error)
@@ -268,6 +274,7 @@ export default app.fetch
 
 console.log('➡️➡️', import.meta)
 if (import.meta.main) {
+  console.log('🏠🏠🏠', 'Running locally')
   // Only runs when executed directly (not imported as a module)
   Deno.serve(app.fetch)
-}
+} else console.log('🚀🚀🚀', 'Running in production')
