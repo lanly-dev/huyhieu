@@ -13,8 +13,12 @@ If you use Deno and ValTown for the first time, you may need to add it to your P
 set PATH=%PATH%;%USERPROFILE%\.deno\bin
 # Install/Update vt
 deno install -grAf jsr:@valtown/vt
+vt upgrade
 # Run in local
 deno run --allow-net main.js
+# Deno
+deno --version
+deno upgrade
 ```
 
 ## Notes
