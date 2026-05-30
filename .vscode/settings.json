@@ -14,5 +14,8 @@
     "Verdana",
     "vsmarketplace"
   ],
-  "editor.rulers": [120]
+  "editor.rulers": [
+    120
+  ],
+  "akazas-love.snowInEditor": false
 }
