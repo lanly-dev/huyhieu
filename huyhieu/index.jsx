@@ -1,4 +1,4 @@
-/** @jsxImportSource npm:hono@3/jsx */
+/** @jsxImportSource https://esm.sh/hono@3/jsx */
 
 export const IndexPage = () => {
   const jsx = (

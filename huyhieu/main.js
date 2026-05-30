@@ -3,7 +3,7 @@ import { Hono } from 'https://deno.land/x/hono@v3.12.7/mod.ts'
 import { IndexPage } from './index.jsx'
 
 const app = new Hono()
-app.get('/', (c) => IndexPage())
+app.get('/', (_c) => IndexPage())
 
 // Badge service route
 app.get('/huyhieu', async (c) => {
@@ -204,8 +204,6 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
       case 'rating':
         if (!statValue) value = 'None'
         break
-        value = parseFloat(statValue).toFixed(1)
-        break
       case 'download':
       case 'install':
         if (statValue >= 1000000) value = (statValue / 1000000).toFixed(1) + 'M'
@@ -268,5 +266,8 @@ app.get('/huyhieu/vsmarketplace/:statType/:namespace', async (c) => {
 
 export default app.fetch
 
-console.log(import.meta)
-Deno.serve(app.fetch)
+console.log('➡️➡️', import.meta)
+if (import.meta.main) {
+  // Only runs when executed directly (not imported as a module)
+  Deno.serve(app.fetch)
+}
