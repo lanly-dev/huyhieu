@@ -15,4 +15,10 @@ set PATH=%PATH%;%USERPROFILE%\.deno\bin
 deno install -grAf jsr:@valtown/vt
 # Run in local
 deno run --allow-net main.js
+# Deno
+deno --version
+deno upgrade
 ```
+
+## Links
+https://docs.val.town/guides/prompting/cli\
