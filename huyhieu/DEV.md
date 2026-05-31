@@ -1,11 +1,9 @@
 
 ## Stack
-
 - Requires [Deno](https://deno.com/)
 - Uses [Hono](https://hono.dev/) for routing
 
 ## Prep
-
 If you use Deno and ValTown for the first time, you may need to add it to your PATH:
 
 ```sh
@@ -28,4 +26,3 @@ deno upgrade
 https://docs.val.town/guides/prompting/cli\
 https://github.com/val-town/val-town-product/discussions\
 https://github.com/val-town/vt/issues\
-
