@@ -53,14 +53,14 @@ A simple, flat, and minimalistic badge generator that can embed a website's favi
 - `statType`: The type of statistic to display
   - `download` / `install` - Total installations (173M)
   - `rating` - Average rating (4.2)
-- `namespace`: Extension identifier (e.g., `ms-python.python`)
+- `namespace`: Extension identifier (e.g., `lanly-dev.easymediaconverter`)
 - `label` (optional): Show label text (default: `true`)
 - `color`, `size`, `shape`, etc.: Same styling options as regular badges
 
 #### VS Marketplace Examples
 
-- Downloads: `/huyhieu/vsmarketplace/download/ms-python.python` ![Downloads](https://huyhieu.val.run/huyhieu/vsmarketplace/download/ms-python.python)
-- Installs: `/huyhieu/vsmarketplace/install/ms-python.python` ![install](https://huyhieu.val.run/huyhieu/vsmarketplace/install/ms-python.python)
-- Rating: `/huyhieu/vsmarketplace/rating/ms-python.python` ![Rating](https://huyhieu.val.run/huyhieu/vsmarketplace/rating/ms-python.python)
-- No Label: `/huyhieu/vsmarketplace/download/ms-python.python?label=false` ![No Label](https://huyhieu.val.run/huyhieu/vsmarketplace/download/ms-python.python?label=false)
-- Custom Style: `/huyhieu/vsmarketplace/download/ms-python.python?color=purple&shape=parallelogram` ![Custom](https://huyhieu.val.run/huyhieu/vsmarketplace/download/ms-python.python?color=purple&size=large&shape=parallelogram)
+- Downloads: `/huyhieu/vsmarketplace/download/lanly-dev.easymediaconverter` ![Downloads](https://huyhieu.val.run/huyhieu/vsmarketplace/download/lanly-dev.easymediaconverter)
+- Installs: `/huyhieu/vsmarketplace/install/lanly-dev.easymediaconverter` ![install](https://huyhieu.val.run/huyhieu/vsmarketplace/install/lanly-dev.easymediaconverter)
+- Rating: `/huyhieu/vsmarketplace/rating/lanly-dev.easymediaconverter` ![Rating](https://huyhieu.val.run/huyhieu/vsmarketplace/rating/lanly-dev.easymediaconverter)
+- No Label: `/huyhieu/vsmarketplace/download/lanly-dev.easymediaconverter?label=false` ![No Label](https://huyhieu.val.run/huyhieu/vsmarketplace/download/lanly-dev.easymediaconverter?label=false)
+- Custom Style: `/huyhieu/vsmarketplace/download/lanly-dev.easymediaconverter?color=purple&shape=parallelogram` ![Custom](https://huyhieu.val.run/huyhieu/vsmarketplace/download/lanly-dev.easymediaconverter?color=purple&size=large&shape=parallelogram)
